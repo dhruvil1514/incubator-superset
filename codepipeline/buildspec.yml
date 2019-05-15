@@ -1,18 +1,23 @@
 version: 0.2
 
+env:
+  variables:
+    AWS_ACCOUNT_ID: 125719378300
+
 phases:
-  pre_build:
+  pre_build:  
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URI=125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zanalytics/apache-superset
-      - IMAGE_TAG=0.28.1
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/zanalytics/apache-superset
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image for tag $IMAGE_TAG...
-      - cd docker/superset/          
+      - cd docker/superset/ 
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:

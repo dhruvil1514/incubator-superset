@@ -47,7 +47,7 @@ RUN useradd -U -m superset && \
     rm -r /var/lib/apt/lists/* && \
     pip install --upgrade pip setuptools && \
     pip install --no-cache-dir \
-    superset==${SUPERSET_VERSION} \
+        superset==${SUPERSET_VERSION} \
         flask-cors \
         flask-mail \
         flask-oauth \
@@ -56,7 +56,7 @@ RUN useradd -U -m superset && \
         impyla \
         infi.clickhouse-orm \
         mysqlclient \
-        psycopg2 \
+        psycopg2-binary \
         pyathena>1.2.0 \
         pyhive \
         pyldap \
@@ -64,13 +64,15 @@ RUN useradd -U -m superset && \
         redis \
         sqlalchemy-clickhouse \
         sqlalchemy-redshift \
-        s3werkzeugcache 
+        s3werkzeugcache \
+        statsd
 
-ENV META_DB_URL='postgresql://superset:%s@postgres:5432/superset' \
+ENV META_DB_URL='postgresql://{META_DB_USER}:{META_DB_PASSWORD}@postgres:5432/superset' \
+    META_DB_USER='superset' \
     META_DB_PASSWORD='superset' \
     REDIS_URL_FOR_CACHE='redis://redis:6379' \
     CELERY_BROKER_URL='redis://redis:6379' \
-    RESULT_BACKEND_REDIS_HOST='redis'
+    RESULT_BACKEND_REDIS_HOST='redis' 
 
 # Configure Filesystem
 COPY superset /usr/local/bin
