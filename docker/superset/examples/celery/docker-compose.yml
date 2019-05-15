@@ -56,8 +56,8 @@ services:
   #   image: zomato/telegraf-superset
   #   restart: always
   #   environment:
-  #     AWS_ACCESS_KEY_ID: AKIAJD72456QJCO2JE2A
-  #     AWS_SECRET_ACCESS_KEY: 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
+  #     AWS_ACCESS_KEY_ID: A
+  #     AWS_SECRET_ACCESS_KEY: B
   #   ports:
   #     - "8125:8125/udp"
 volumes:
