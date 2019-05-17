@@ -47,8 +47,5 @@ processors:
 
 output.kafka:
   hosts: '${KAFKA_HOSTS}'
-    # - "kafka1.internal.zomans.com:9092"
-    # - "kafka2.internal.zomans.com:9092"
-    # - "kafka3.internal.zomans.com:9092"
   topic: "%{[kafka_topic]}"
   max_message_bytes: 10000000

@@ -12,7 +12,7 @@ META_DB_USER = os.getenv('META_DB_USER', '')
 META_DB_PASSWORD = os.getenv('META_DB_PASSWORD', '')
 SQLALCHEMY_DATABASE_URI = META_DB_URL.format(META_DB_USER=META_DB_USER, META_DB_PASSWORD=META_DB_PASSWORD)
 
-AUTH_TYPE = AUTH_DB
+AUTH_TYPE = AUTH_OAUTH
 OAUTH_PROVIDERS = [
     {'name':'google', 'icon':'fa-google', 'token_key':'access_token',
         'whitelist': ['@zomato.com'],
