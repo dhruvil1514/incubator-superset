@@ -1,0 +1,51 @@
+filebeat.prospectors:
+  - type: log
+    enabled: true
+    encoding: utf-8
+    document_type: docker
+    fields:
+      es_index_prefix: secret-zanalytics-unnamed-docker-logs-
+      kafka_topic: logs.unclassified.docker
+    fields_under_root: true
+    paths:
+      - "/var/lib/docker/containers/*/*.log"
+    json.keys_under_root: true
+
+processors:
+  - add_docker_metadata: ~
+  - drop_fields:
+      when:
+        has_fields:
+          - "docker.container.labels.es_index_prefix"
+      fields:
+        - es_index_prefix
+  - drop_fields:
+      when:
+        has_fields:
+          - "docker.container.labels.kafka_topic"
+      fields:
+        - kafka_topic
+  - rename:
+      when:
+        has_fields:
+          - "docker.container.labels.kafka_topic"
+      fields:
+        - from: "docker.container.labels.kafka_topic"
+          to: "kafka_topic"
+  - rename:
+      when:
+        has_fields:
+          - "docker.container.labels.es_index_prefix"
+      fields:
+        - from: "docker.container.labels.es_index_prefix"
+          to: "es_index_prefix"
+  - decode_json_fields:
+      fields:
+        - "log"
+      target: ""
+      overwrite_keys: true
+
+output.kafka:
+  hosts: '${KAFKA_HOSTS}'
+  topic: "%{[kafka_topic]}"
+  max_message_bytes: 10000000
