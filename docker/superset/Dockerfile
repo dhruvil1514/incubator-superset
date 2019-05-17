@@ -65,7 +65,8 @@ RUN useradd -U -m superset && \
         sqlalchemy-clickhouse \
         sqlalchemy-redshift \
         s3werkzeugcache \
-        statsd
+        statsd \
+        pandas==0.23.1
 
 ENV META_DB_URL='postgresql://{META_DB_USER}:{META_DB_PASSWORD}@postgres:5432/superset' \
     META_DB_USER='superset' \
